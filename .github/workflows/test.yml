@@ -1,8 +1,6 @@
 name: Add Update Label to Issues Weekly
 
-on:
-  schedule:
-    - cron:  '0 0 * * 5'
+on: workflow_dispatch
 
 jobs:
   Add-Update-Label-to-Issues-Weekly:
@@ -12,5 +10,5 @@ jobs:
       - uses: actions/github-script@v4
         with:
           script: |
-            const script = require('./path/to/script.js')
+            const script = require('../../../sampleScript.js')
             console.log(script({github, context}))
