@@ -10,5 +10,5 @@ jobs:
       - uses: actions/github-script@v4
         with:
           script: |
-            const script = require('../../sampleScript.js')
+            const script = require('./sampleScript.js')
             console.log(script({github, context}))
