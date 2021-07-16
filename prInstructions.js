@@ -36,8 +36,8 @@ function createMessage() {
     const cloneURL = context.payload.pull_request.head.repo.clone_url;
 
     const instructionString =
-    `git checkout -b ${nameOfCollaborator}-${nameOfFromBranch} ${nameOfIntoBranch}
-    git pull ${cloneURL} ${nameOfFromBranch}`
+`git checkout -b ${nameOfCollaborator}-${nameOfFromBranch} ${nameOfIntoBranch}
+git pull ${cloneURL} ${nameOfFromBranch}`
 
     const text = fs.readFileSync("./pr-instructions-template.md").toString('utf-8');
     const completedInstuctions = text.replace('${commandlineInstructions}', instructionString)
