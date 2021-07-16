@@ -11,4 +11,4 @@ jobs:
         with:
           script: |
             const script = require('./sampleScript.js')
-            console.log(script({g: github, c: context}))
+            console.log(await script({g: github, c: context}))
