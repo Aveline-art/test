@@ -1,6 +1,8 @@
 name: Add Pull Request Instructions
 
-on: workflow_dispatch
+on:
+  pull_request:
+    types: [opened]
 
 jobs:
   Add-Pull-Request-Instructions:
