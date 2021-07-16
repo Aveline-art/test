@@ -8,22 +8,25 @@ var context;
 async function main({ g, c }) {
     github = g;
     context = c;
-
-    postComment()
+    postComment();
+    return true;
 }
 
 async function postComment() {
     const body = createMessage()
+    let results;
+    try {
+        results = await github.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.number,
+            body: body,
+        });
+    } catch(err) {
+        throw new Error(err);
+    }
 
-    /*
-    const results = await github.issues.createComment({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: context.payload.number,
-        body: body,
-    });
-
-    console.log(JSON.stringify(results));*/
+    console.log(JSON.stringify(results));
 }
 
 function createMessage() {
@@ -38,8 +41,6 @@ function createMessage() {
     `
 
     const text = fs.readFileSync("./pr-instructions-template.md").toString('utf-8');
-    console.log(text);
-
     const completedInstuctions = text.replace('${commandlineInstructions}', instructionString)
 
     return completedInstuctions
