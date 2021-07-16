@@ -1,4 +1,7 @@
+<-- Note: Commandline instructions are added into where the placeholder string, "${commandlineInstructions}" first appears --->
+
+From your project repository, check out a new branch and test the changes.
+
 ```
-git checkout -b ${nameOfCollaborator}-${nameOfFromBranch} ${nameOfIntoBranch}
-git pull https://github.com/${nameOfCollaborator}/website.git ${nameOfFromBranch}
+${commandlineInstructions}
 ```
