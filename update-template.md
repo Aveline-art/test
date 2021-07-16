@@ -1,5 +1,0 @@
-* Progress: "What is the current status of your project? What have you completed and what is left to do?"
-* Blockers: "Difficulties or errors encountered."
-* Availability: "How much time will you have this week to work on this issue?"
-* ETA: "When do you expect this issue to be completed?"
-* Pictures: "Add any pictures of the visual changes made to the site so far."
