@@ -1,74 +1,14 @@
-var github;
-var context;
+name: Add Update Label to Issues Weekly
 
-async function main({ g, c }) {
-  github = g;
-  context = c;
-  const issueNums = await retrieveIssueNums();
-  for (num of issueNums) {
-    const timeline = retrieveTimeline(num);
-    assessTimeline(timeline);
-    addUpdateLabel(num);
-  }
-}
+on: workflow_dispatch
 
-async function retrieveIssueNums() {
-  let issues;
-  try {
-    // https://octokit.github.io/rest.js/v18#issues-list-for-repo
-    issues = await github.issues.listForRepo({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      state: 'open',
-      assignee: '*',
-    });
-  } catch (err) {
-    throw new Error(err)
-  }
-
-  values = []
-  for (issue of issues.data) {
-    // If the issue is not a pull request, push the issue number into the array
-    if (!issue.hasOwnProperty("pull_request"))
-      values.push(issue.number);
-  }
-
-  return values;
-}
-
-async function addUpdateLabel(issueNum) {
-  try {
-    // https://octokit.github.io/rest.js/v18#issues-add-labels
-    await github.issues.addLabels({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: num,
-      labels: ['To Update !']
-    })
-
-
-  } catch (err) {
-    console.error(`Could not add label for issue ${num}`)
-  }
-}
-
-async function retrieveTimeline(issueNum) {
-  let timeline
-  try {
-    timeline = await github.issues.listEventsForTimeline({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: issueNum,
-    });
-  } catch (err) {
-    console.error(`Could not retrieve timeline for issue ${num}`)
-  }
-
-  return timeline
-}
-
-async function assessTimeline(timeline) {
-  console.log(timeline)
-}
-
-module.exports = main
+jobs:
+  Add-Update-Label-to-Issues-Weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            const script = require('./sampleScript.js')
+            console.log(script({g: github, c: context}))
