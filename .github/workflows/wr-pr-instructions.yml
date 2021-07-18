@@ -57,5 +57,5 @@ jobs:
             console.log(typeof artifact);
 
             const script = require('./postComment.js')
-            console.log(await script({g: github, c: context}, {issueNum, message}))
+            console.log(await script({g: github, c: context}))
 
