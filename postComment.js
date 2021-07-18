@@ -8,6 +8,8 @@ var context;
 async function main({ g, c }, {issueNum, message}) {
     github = g;
     context = c;
+    console.log('-------dadssa-------------------')
+    console.log(issueNum, message)
     postComment(issueNum, message);
     return true;
 }
@@ -24,6 +26,9 @@ async function postComment(issueNum, message) {
     } catch(err) {
         throw new Error(err);
     }
+
+    console.log('-------------123-------------')
+    console.log(results)
 }
 
 module.exports = main

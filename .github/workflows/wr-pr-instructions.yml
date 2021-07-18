@@ -46,16 +46,13 @@ jobs:
             return artifactJSON
       
       - uses: actions/checkout@v2
-
       # Create the message to post
       - name: Post Comment
         uses: actions/github-script@v4
         with:
           script: |
             const artifact = ${{ steps.artifact.outputs.result }};
-            console.log(artifact);
-            console.log(typeof artifact);
-
+            
             const script = require('./postComment.js')
             console.log(await script({g: github, c: context}, {artifact}))
 
