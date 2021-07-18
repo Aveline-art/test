@@ -18,6 +18,7 @@ jobs:
           script: |
             const script = require('./createMessage.js')
             const message = script({g: github, c: context})
+            console.log(message);
             return JSON.stringify({ message: message, issueNum: context.payload.number })
       
       # Create an artifact with the message
