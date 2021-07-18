@@ -35,7 +35,6 @@ jobs:
             fs.writeFileSync('${{github.workspace}}/artifact.zip', Buffer.from(download.data));
       - run: unzip artifact.zip
 
-      - uses: actions/checkout@v2
       - uses: actions/github-script@v4
         with:
           script: |

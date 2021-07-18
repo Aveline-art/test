@@ -23,9 +23,6 @@ git pull ${cloneURL} ${nameOfFromBranch}`
 
     const text = fs.readFileSync("./pr-instructions-template.md").toString('utf-8');
     const completedInstuctions = text.replace('${commandlineInstructions}', instructionString)
-
-    console.log('------------compuleted-------------------------')
-    console.log(completedInstuctions);
     return completedInstuctions
 }
 
