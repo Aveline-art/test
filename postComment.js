@@ -5,12 +5,9 @@ var fs = require("fs");
 var github;
 var context;
 
-async function main({ g, c }, {issueNum, instruction}) {
+async function main({ g, c }, { issueNum, instruction }) {
     github = g;
     context = c;
-    console.log('-------dadssa-------------------')
-    console.log(issueNum)
-    console.log(instruction)
 
     const instructions = formatComment(instruction)
     postComment(issueNum, instructions);
@@ -24,20 +21,16 @@ function formatComment(instruction) {
 }
 
 async function postComment(issueNum, instructions) {
-    let results;
     try {
-        results = await github.issues.createComment({
+        await github.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: issueNum,
             body: instructions,
         });
-    } catch(err) {
+    } catch (err) {
         throw new Error(err);
     }
-
-    console.log('-------------123-------------')
-    console.log(results)
 }
 
 module.exports = main
