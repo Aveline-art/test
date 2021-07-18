@@ -8,10 +8,10 @@ var context;
 function main({ g, c }) {
     github = g;
     context = c;
-    return createMessage();
+    return createInstruction();
 }
 
-function createMessage() {
+function createInstruction() {
     const nameOfCollaborator = context.payload.pull_request.head.repo.owner.login;
     const nameOfFromBranch = context.payload.pull_request.head.ref;
     const nameOfIntoBranch = context.payload.pull_request.base.ref;
@@ -21,9 +21,7 @@ function createMessage() {
 `git checkout -b ${nameOfCollaborator}-${nameOfFromBranch} ${nameOfIntoBranch}
 git pull ${cloneURL} ${nameOfFromBranch}`
 
-    const text = fs.readFileSync("./pr-instructions-template.md").toString('utf-8');
-    const completedInstuctions = text.replace('${commandlineInstructions}', instructionString)
-    return completedInstuctions
+    return instructionString
 }
 
 module.exports = main

@@ -5,23 +5,32 @@ var fs = require("fs");
 var github;
 var context;
 
-async function main({ g, c }, {issueNum, message}) {
+async function main({ g, c }, {issueNum, instruction}) {
     github = g;
     context = c;
     console.log('-------dadssa-------------------')
-    console.log(issueNum, message)
-    postComment(issueNum, message);
+    console.log(issueNum)
+    console.log(instruction)
+
+    const instructions = formatComment(instruction)
+    postComment(issueNum, instructions);
     return true;
 }
 
-async function postComment(issueNum, message) {
+function formatComment(instruction) {
+    const text = fs.readFileSync("./pr-instructions-template.md").toString('utf-8');
+    const completedInstuctions = text.replace('${commandlineInstructions}', instruction)
+    return completedInstuctions
+}
+
+async function postComment(issueNum, instructions) {
     let results;
     try {
         results = await github.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: issueNum,
-            body: message,
+            body: instructions,
         });
     } catch(err) {
         throw new Error(err);

@@ -13,19 +13,19 @@ jobs:
       # Create the message to post
       - name: Create Message
         uses: actions/github-script@v4
-        id: message
+        id: instruction
         with:
           script: |
-            const script = require('./createMessage.js')
-            const message = script({g: github, c: context})
-            console.log(message);
-            return JSON.stringify({ message: message, issueNum: context.payload.number })
+            const script = require('./createInstruction.js')
+            const instruction = script({g: github, c: context})
+            console.log(instruction);
+            return JSON.stringify({ instruction: instruction, issueNum: context.payload.number })
       
       # Create an artifact with the message
       - name: Create Artifacts
         run: |
           mkdir -p addingPrInstructions/artifact
-          echo ${{ steps.message.outputs.result }} > addingPrInstructions/artifact/artifact.txt
+          echo ${{ steps.instruction.outputs.result }} > addingPrInstructions/artifact/artifact.txt
       
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
