@@ -52,12 +52,7 @@ jobs:
         with:
           script: |
             const artifact = ${{ steps.artifact.outputs.result }};
-            console.log('-------------------323--------------')
-            console.log(artifact)
-            console.log('----------767-------');
-            console.log(artifact.issueNum);
-            console.log(artifact.instruction);
 
             const script = require('./postComment.js')
-            console.log(await script({g: github, c: context}, artifact))
+            script({g: github, c: context}, artifact)
 
