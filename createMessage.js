@@ -5,7 +5,7 @@ var fs = require("fs");
 var github;
 var context;
 
-async function main({ g, c }) {
+function main({ g, c }) {
     github = g;
     context = c;
     return createMessage();
