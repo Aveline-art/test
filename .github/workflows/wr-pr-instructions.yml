@@ -1,0 +1,18 @@
+name: WR Add Pull Request Instructions
+
+on:
+  workflow_run:
+    workflows: ["Add Pull Request Instructions"]
+    types: [completed]
+
+jobs:
+  Last-Workflow-Success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            const script = require('./prInstructions.js')
+            console.log(await script({g: github, c: context}))

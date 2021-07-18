@@ -2,7 +2,7 @@ name: Add Pull Request Instructions
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened]
 
 jobs:
   Add-Pull-Request-Instructions:
@@ -12,5 +12,6 @@ jobs:
       - uses: actions/github-script@v4
         with:
           script: |
-            const script = require('./prInstructions.js')
-            console.log(await script({g: github, c: context}))
+            //const script = require('./prInstructions.js')
+            //console.log(await script({g: github, c: context}))
+            console.log('next!')

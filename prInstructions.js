@@ -8,6 +8,8 @@ var context;
 async function main({ g, c }) {
     github = g;
     context = c;
+    console.log('------------c-------------------------')
+    console.log(JSON.stringify(c))
     postComment();
     return true;
 }
@@ -25,7 +27,7 @@ async function postComment() {
     } catch(err) {
         throw new Error(err);
     }
-
+    console.log('------------jsonstringify-------------------------')
     console.log(JSON.stringify(results));
 }
 
@@ -42,6 +44,8 @@ git pull ${cloneURL} ${nameOfFromBranch}`
     const text = fs.readFileSync("./pr-instructions-template.md").toString('utf-8');
     const completedInstuctions = text.replace('${commandlineInstructions}', instructionString)
 
+    console.log('------------compuleted-------------------------')
+    console.log(completedInstuctions);
     return completedInstuctions
 }
 
