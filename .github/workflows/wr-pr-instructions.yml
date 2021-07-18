@@ -36,14 +36,28 @@ jobs:
       - run: unzip artifact.zip
 
       - uses: actions/github-script@v4
+        id: artifact
         with:
           script: |
             // Retrieve pull request and issue number from downloaded artifact
             const fs = require('fs')
             const artifact = fs.readFileSync('artifact.txt')
-            const artifactJSON = JSON.parse(artifact)
-            const issueNum = artifactJSON.issueNum
-            const message = artifactJSON.message
+            return artifact
 
             const script = require('./postComment.js')
             console.log(await script({g: github, c: context}, {issueNum, message}))
+      
+      - uses: actions/checkout@v2
+
+      # Create the message to post
+      - name: Post Comment
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const artifact = ${{ steps.artifact.outputs.result }};
+            const artifactJSON = JSON.parse(artifact);
+
+            const script = require('./createMessage.js');
+            const message = script({g: github, c: context}, artifact)
+            return JSON.stringify({message: message, issueNum: context.payload.number})
+

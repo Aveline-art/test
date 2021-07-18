@@ -22,12 +22,9 @@ jobs:
       
       # Create an artifact with the message
       - name: Create Artifacts
-        # Escapes user input for injection attacks
-        env:
-          ARTIFACT: ${{ steps.message.outputs.result }}
         run: |
           mkdir -p addingPrInstructions/artifact
-          echo ${{ env.ARTIFACT }} > addingPrInstructions/artifact/artifact.txt
+          echo ${{ steps.message.outputs.result }} > addingPrInstructions/artifact/artifact.txt
       
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
