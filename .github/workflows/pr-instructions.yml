@@ -9,9 +9,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/github-script@v4
+
+      # Create the message to post
+      - name: Create Message
+        uses: actions/github-script@v4
+        id: message
         with:
           script: |
-            //const script = require('./prInstructions.js')
-            //console.log(await script({g: github, c: context}))
-            console.log('next!')
+            const script = require('./createMessage.js')
+            const message = script({g: github, c: context}))
+            return JSON.stringify({message: message, issueNum: context.payload.number})
+      
+      # Create an artifact with the message
+      - name: Create Artifacts
+        # Escapes user input for injection attacks
+        env:
+          ARTIFACT: ${{ steps.message.outputs.result }}
+        run: |
+          mkdir -p addingPrInstructions/artifact
+          echo ${{ env.ARTIFACT }} > addingPrInstructions/artifact/artifact.txt
+      
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: adding-pr-instructions-artifact
+          path: addingPrInstructions/artifact/

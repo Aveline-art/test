@@ -8,27 +8,8 @@ var context;
 async function main({ g, c }) {
     github = g;
     context = c;
-    console.log('------------c-------------------------')
-    console.log(JSON.stringify(c))
-    postComment();
-    return true;
-}
-
-async function postComment() {
-    const body = createMessage()
-    let results;
-    try {
-        results = await github.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.number,
-            body: body,
-        });
-    } catch(err) {
-        throw new Error(err);
-    }
-    console.log('------------jsonstringify-------------------------')
-    console.log(JSON.stringify(results));
+    createComment();
+    return createComment;
 }
 
 function createMessage() {
