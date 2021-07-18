@@ -8,7 +8,7 @@ var context;
 async function main({ g, c }) {
     github = g;
     context = c;
-    createComment();
+    createMessage();
     return createComment;
 }
 
