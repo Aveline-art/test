@@ -18,7 +18,6 @@ jobs:
           script: |
             const script = require('./createInstruction.js')
             const instruction = script({g: github, c: context})
-            console.log(instruction);
             return JSON.stringify({ instruction: instruction, issueNum: context.payload.number })
       
       # Create an artifact with the message
