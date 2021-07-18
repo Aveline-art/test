@@ -55,6 +55,8 @@ jobs:
         with:
           script: |
             const artifact = ${{ steps.artifact.outputs.result }};
+            console.log(artifact);
+            console.log(typeof artifact);
             const artifactJSON = JSON.parse(artifact);
 
             const script = require('./createMessage.js');
