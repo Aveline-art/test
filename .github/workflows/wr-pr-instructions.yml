@@ -42,10 +42,8 @@ jobs:
             // Retrieve pull request and issue number from downloaded artifact
             const fs = require('fs')
             const artifact = fs.readFileSync('artifact.txt')
-            return artifact
-
-            const script = require('./postComment.js')
-            console.log(await script({g: github, c: context}, {issueNum, message}))
+            const artifactJSON = JSON.parse(artifact);
+            return artifactJSON
       
       - uses: actions/checkout@v2
 
@@ -57,9 +55,7 @@ jobs:
             const artifact = ${{ steps.artifact.outputs.result }};
             console.log(artifact);
             console.log(typeof artifact);
-            const artifactJSON = JSON.parse(artifact);
 
-            const script = require('./createMessage.js');
-            const message = script({g: github, c: context}, artifact)
-            return JSON.stringify({message: message, issueNum: context.payload.number})
+            const script = require('./postComment.js')
+            console.log(await script({g: github, c: context}, {issueNum, message}))
 
