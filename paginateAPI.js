@@ -23,7 +23,7 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
 
         const processedResults = processor(results)
 
-        if (processedResults) {
+        if (processedResults || page == 10) {
             store.push({
                 page: page,
                 result: processedResults
