@@ -44,7 +44,7 @@ async function getProjectId() {
 
   const payload = {
     owner: context.repo.owner,
-    repo: context.ower.repo,
+    repo: context.repo.repo,
     per_page: 100,
   }
 
