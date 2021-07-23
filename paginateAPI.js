@@ -23,6 +23,7 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
 
         const processedResults = processor(results)
 
+        // note: delete this during production
         if (page == 10) {
             return store
         }
