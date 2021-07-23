@@ -5,16 +5,17 @@ const { paginatePage } = require('./paginateAPI.js')
 // Global variables
 var github;
 var context;
-const label = 'To Update !'; // label to add
-const updateLimit = 3 // only check all events in an issue within the last updateLimit days
-
-// testing values to be deleted
-
+const projectName = 'Project Board';
+const columnName = ' In progress (actively working)';
+const labels = ['To Update !']; // labels to add
+const updateLimit = 3; // only check all events in an issue within the last updateLimit days
 
 async function main({ g, c }) {
   github = g;
   context = c;
 
+  const projectId = await getProjectId;
+  /*
   const issueNums = await getIssueNumsFromColumn();
 
   for (num of issueNums) {
@@ -32,9 +33,41 @@ async function main({ g, c }) {
     } else {
       console.log(`No updates needed for issue ${num}`);
     }
-  }
+  }*/
 
   return true;
+}
+
+async function getProjectId() {
+  let projectNumber;
+
+  const payload = {
+    owner: context.repo.owner,
+    repo: context.ower.repo,
+    per_page: 100,
+  }
+
+  function processor(results) {
+    if (results.data.length) {
+      for (project of results.data) {
+        console.log(project.name);
+        if (project.name == projectName) {
+          projectNumber = project.number
+          return false
+        }
+      }
+    } else {
+      return false
+    }
+  }
+
+  await paginatePage({
+    apicall: github.projects.listForRepo,
+    payload: payload,
+    processor: processor,
+  });
+
+  console.log(projectNumber);
 }
 
 async function getIssueNumsFromColumn() {
@@ -134,7 +167,7 @@ async function addUpdateLabel(issueNum) {
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: issueNum,
-      labels: ['To Update !']
+      labels: labels,
     })
 
   } catch (err) {
