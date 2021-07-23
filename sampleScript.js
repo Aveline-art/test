@@ -52,7 +52,7 @@ async function getProjectId() {
     if (results.data.length) {
       for (project of results.data) {
         if (project.name == projectName) {
-          projectId = project.number;
+          projectId = project.id;
           return false;
         }
       }
