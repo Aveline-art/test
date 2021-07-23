@@ -28,8 +28,6 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
         }
 
         if (processedResults) {
-            console.log('------------')
-            console.log(processedResults);
             store.push({
                 page: page,
                 result: processedResults
