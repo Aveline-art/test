@@ -6,9 +6,10 @@
  * Note: to work properly, the processor function at **MINIMUM** has to **return falsy when the pagination needs to stop**. Otherwise, paginate will endlessly loop through all the pages.
  * @param {String} pageVar the name of the key that sets the page number in the payload, default 'page'
  * @param {Number} startPage the page number to start the apicall, default 1
+ * @param {Number} stopPage the page number to end the api call, default 100
  * @returns a recursive function that itself returns an Array of the processed results by page
  */
-async function paginatePage({ apicall, payload, processor, pageVar = 'page', startPage = 1 }) {
+async function paginatePage({ apicall, payload, processor, pageVar = 'page', startPage = 1, stopPage = 100}) {
 
     /**
      * An inner helper function that recursively performs pagination across the api in the apicall variable within paginate function's scope
@@ -17,16 +18,16 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
      * @returns 
      */
     async function helper(page, store = []) {
+        if (page == stopPage + 1) {
+            console.error(`You have reached the emergency stopPage to prevent infinite loops. You are currently on page, ${page}. To go beyond this, set the stopPage key in the parameter above this number.`);
+            return store
+        }
+
         payload[pageVar] = page;
         let results;
         results = await performAPICall(apicall, payload);
 
         const processedResults = processor(results)
-
-        // note: delete this during production
-        if (page == 10) {
-            return store
-        }
 
         if (processedResults) {
             store.push({

@@ -21,11 +21,7 @@ function apicallTest(payload) {
  * @returns isolated portions of the obj variable, in this case, the page number
  */
 function processorTest(obj) {
-    if (obj.page == 100) {
-        return null
-    } else {
-        return obj.page
-    }
+    return obj.page;
 }
 
 // A fake payload to use for the api call
@@ -33,7 +29,7 @@ const payload = {
     page: 1
 }
 
-// Runs the paginate function and logs the result; should print an array of objects containing page numbers and results containing numbers from 1-99.
+// Runs the paginate function and logs the result; should print an array of objects containing page numbers and results containing numbers from 1-100. Also should return an alert for the stop page.
 paginatePage({
     apicall: apicallTest,
     payload: payload,
