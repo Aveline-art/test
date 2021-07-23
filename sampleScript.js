@@ -14,7 +14,7 @@ async function main({ g, c }) {
   github = g;
   context = c;
 
-  const projectId = await getProjectId;
+  const projectId = await getProjectId();
   /*
   const issueNums = await getIssueNumsFromColumn();
 
