@@ -31,7 +31,6 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
 
         // Sets the payload to be the next page and performs the api call.
         payload[pageVar] = pageNum;
-        console.log(payload)
         const results = await performAPICall(apicall, payload, processor, failure);
 
         // If performAPICall returns true by way of the failure function, continue with the next page. Note that failure, by default, re-throws the caught error, and stops the script entirely.
