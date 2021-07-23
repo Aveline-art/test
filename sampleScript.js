@@ -6,7 +6,7 @@ const { paginatePage } = require('./paginateAPI.js')
 var github;
 var context;
 const projectName = 'Project Board';
-const columnName = ' In progress (actively working)';
+const columnName = 'In progress (actively working)';
 const labels = ['To Update !']; // labels to add
 const updateLimit = 3; // only check all events in an issue within the last updateLimit days
 
