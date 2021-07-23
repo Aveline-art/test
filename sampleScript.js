@@ -51,9 +51,9 @@ async function getProjectId() {
   function processor(results) {
     if (results.data.length) {
       for (project of results.data) {
-        console.log(project.name);
         if (project.name == projectName) {
           projectId = project.number
+          console.log(projectId);
           return false
         }
       }
@@ -88,13 +88,15 @@ async function getColumnId(projectId) {
       for (column of results.data) {
         if (column.name == columnName) {
           columnId = column.id;
-          return false
+          return false;
         }
       }
     } else {
-      return false
+      return false;
     }
   }
+
+  console.log('do I still come here?')
 
   await paginatePage({
     apicall: github.projects.listColumns,
