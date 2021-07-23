@@ -7,9 +7,10 @@
  * @param {String} pageVar the name of the key that sets the page number in the payload, default 'page'
  * @param {Number} startPage the page number to start the apicall, default 1
  * @param {Number} stopPage the page number to end the api call, default 100
+ * @param {Function} failure determines the results an error when performing the apicall, default to throwing the error
  * @returns a recursive function that itself returns an Array of the processed results by page
  */
-async function paginatePage({ apicall, payload, processor, pageVar = 'page', startPage = 1, stopPage = 100}) {
+async function paginatePage({ apicall, payload, processor, pageVar = 'page', startPage = 1, stopPage = 100, failure = err => { throw new Error(err) }}) {
 
     /**
      * An inner helper function that recursively performs pagination across the api in the apicall variable within paginate function's scope
@@ -25,7 +26,7 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
 
         payload[pageVar] = page;
         let results;
-        results = await performAPICall(apicall, payload);
+        results = await performAPICall(apicall, payload, failure);
 
         const processedResults = processor(results)
 
@@ -49,11 +50,11 @@ async function paginatePage({ apicall, payload, processor, pageVar = 'page', sta
  * @param {Object} payload a object of key-value pairs representing the api payload
  * @returns the results of the api call with the given payload
  */
-async function performAPICall(apicall, payload) {
+async function performAPICall(apicall, payload, failure) {
     try {
         return await apicall(payload);
     } catch (err) {
-        throw new Error(err);
+        failure(err);
     }
 }
 
