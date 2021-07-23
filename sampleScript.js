@@ -39,6 +39,7 @@ async function main({ g, c }) {
 }
 
 async function getProjectId() {
+  console.log('doing this now')
   let projectNumber;
 
   const payload = {
