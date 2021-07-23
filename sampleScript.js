@@ -15,8 +15,9 @@ async function main({ g, c }) {
   context = c;
 
   const projectId = await getProjectId();
-  /*
-  const issueNums = await getIssueNumsFromColumn();
+  const columnId = await getColumnId(projectId);
+
+  const issueNums = await getIssueNumsFromColumn(columnId);
 
   for (num of issueNums) {
     const timeline = await getTimeline(num);
@@ -33,14 +34,13 @@ async function main({ g, c }) {
     } else {
       console.log(`No updates needed for issue ${num}`);
     }
-  }*/
+  }
 
   return true;
 }
 
 async function getProjectId() {
-  console.log('doing this now')
-  let projectNumber;
+  let projectId;
 
   const payload = {
     owner: context.repo.owner,
@@ -53,7 +53,7 @@ async function getProjectId() {
       for (project of results.data) {
         console.log(project.name);
         if (project.name == projectName) {
-          projectNumber = project.number
+          projectId = project.number
           return false
         }
       }
@@ -68,12 +68,51 @@ async function getProjectId() {
     processor: processor,
   });
 
-  console.log(projectNumber);
+  if (projectId) {
+    return projectId;
+  } else {
+    throw new Error('Project not found. Please check that the name is correct.');
+  }
 }
 
-async function getIssueNumsFromColumn() {
+async function getColumnId(projectId) {
+  let columnId;
+
   const payload = {
-    column_id: inProgressColumnId,
+    project_id: projectId,
+    per_page: 100,
+  }
+
+  function processor(results) {
+    if (results.data.length) {
+      for (column of results.data) {
+        if (column.name == columnName) {
+          columnId = column.id;
+          return false
+        }
+      }
+    } else {
+      return false
+    }
+  }
+
+  await paginatePage({
+    apicall: github.projects.listColumns,
+    payload: payload,
+    processor: processor,
+  });
+
+  if (columnId) {
+    return columnId;
+  } else {
+    throw new Error('Column not found. Please check that the name is correct.');
+  }
+
+}
+
+async function getIssueNumsFromColumn(columnId) {
+  const payload = {
+    column_id: columnId,
     per_page: 100,
   }
 
