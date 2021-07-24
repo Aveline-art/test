@@ -85,10 +85,9 @@ async function getIssueNumsFromColumn(columnId) {
 async function getTimeline(issueNum) {
   let page = 1;
   let timeline = [];
-  console.log(issueNum);
   while (page < 100) {
     try {
-      const results = await github.projects.listCards({
+      const results = await github.projects.listEventsForTimeline({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: issueNum,
