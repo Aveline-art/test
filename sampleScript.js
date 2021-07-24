@@ -56,7 +56,7 @@ async function* getIssueNumsFromColumn(columnId) {
         page: page
       });
 
-      if (result.data.length) {
+      if (results.data.length) {
         for (card of results.data) {
           const arr = card.content_url.split('/');
           yield arr.pop()
