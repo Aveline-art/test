@@ -1,4 +1,4 @@
-const { paginatePage } = require("./paginateAPI")
+const { paginate } = require("./paginate")
 
 // These functions serves to demo the paginate function from paginateAPI.js
 
@@ -30,7 +30,7 @@ const payload = {
 }
 
 // Runs the paginate function and logs the result; should print an array of objects containing page numbers and results containing numbers from 1-100. Also should return an alert for the stop page.
-paginatePage({
+paginate({
     apicall: apicallTest,
     payload: payload,
     processor: processorTest,

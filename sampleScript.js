@@ -1,5 +1,4 @@
 // Import modules
-const { paginate } = require('./paginate.js');
 const { findLinkedIssue } = require('./findLinkedIssue.js');
 
 // Global variables
@@ -21,6 +20,9 @@ async function main({ g, c, columnId }) {
 
   // Retrieve all issue numbers from a column
   const issueNums = await getIssueNumsFromColumn(columnId);
+  for (num of issueNums) {
+    console.log(num);
+  }
 
   for (num of issueNums) {
     const timeline = await getTimeline(num);
@@ -47,33 +49,25 @@ async function main({ g, c, columnId }) {
  * @param {Number} columnId the id of the column in GitHub's database
  * @returns an Array of issue numbers
  */
-async function getIssueNumsFromColumn(columnId) {
-
-  let issueNums = [];
-  async function apicall(page) {
-    // https://octokit.github.io/rest.js/v18#projects-list-cards
+async function* getIssueNumsFromColumn(columnId) {
+  while (true) {
     const results = await github.projects.listCards({
       column_id: columnId,
       per_page: 100,
       page: page
     });
 
-    // Processes results of API call
-    if (results.data.length) {
+    try {
       for (card of results.data) {
-        if (card.hasOwnProperty('content_url')) {
-          // Isolates the issue number from the rest of the url and pushes it into the array.
-          const arr = card.content_url.split('/');
-          issueNums.push(arr.pop());
-        }
+        const arr = card.content_url.split('/');
+        yield arr.pop();
       }
-    } else {
-      return false
+    } finally {
+      if (results.data.length == 0) {
+        return
+      }
     }
   }
-
-  await paginate(apicall, err => { throw new Error(err) });
-  return issueNums
 }
 
 /**
