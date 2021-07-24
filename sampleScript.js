@@ -151,17 +151,22 @@ async function addUpdateLabel(issueNum) {
       repo: context.repo.repo,
       issue_number: issueNum,
       name: removeLabels,
-    })
-    // https://octokit.github.io/rest.js/v18#issues-add-labels
-    await github.issues.addLabels({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: issueNum,
-      labels: addLabels,
-    })
+    });
   } catch (err) {
-    console.error(`Could not add label for issue ${num}`);
-    console.error(err);
+    console.error(`No labels to remove for ${num}`);
+  } finally {
+    try {
+      // https://octokit.github.io/rest.js/v18#issues-add-labels
+      await github.issues.addLabels({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: issueNum,
+        labels: addLabels,
+      });
+    } catch {
+      console.error(`Could not add label for issue ${num}`);
+      console.error(err);
+    }
   }
 }
 
