@@ -12,6 +12,6 @@ jobs:
           IN_PROGRESS_COLUMN_ID: ${{ secrets.IN_PROGRESS_COLUMN_ID }}
         with:
           script: |
-            const { columnId: IN_PROGRESS_COLUMN_ID } = process.env;
+            const { IN_PROGRESS_COLUMN_ID: columnId } = process.env;
             const script = require('./sampleScript.js');
             script({g: github, c: context, columnId: columnId });
