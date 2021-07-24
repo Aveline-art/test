@@ -20,7 +20,6 @@ async function main({ g, c, columnId }) {
 
   // Retrieve all issue numbers from a column
   const issueNums = await getIssueNumsFromColumn(columnId);
-  console.log(issueNums)
   for await (num of issueNums) {
     console.log(num);
   }
@@ -66,7 +65,6 @@ async function* getIssueNumsFromColumn(columnId) {
     try {
       for (card of results.data) {
         const arr = card.content_url.split('/');
-        console.log(card.content_url);
         yield arr.pop();
       }
     } finally {
