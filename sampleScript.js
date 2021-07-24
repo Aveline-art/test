@@ -48,7 +48,7 @@ async function main({ g, c, columnId }) {
  */
 async function getIssueNumsFromColumn(columnId) {
   let page = 1;
-  let issueNums;
+  let issueNums = [];
   while (page < 100) {
     try {
       const results = await github.projects.listCards({
@@ -84,7 +84,7 @@ async function getIssueNumsFromColumn(columnId) {
  */
 async function getTimeline(issueNum) {
   let page = 1;
-  let timeline = []
+  let timeline = [];
   while (page < 100) {
     try {
       const results = await github.projects.listCards({
