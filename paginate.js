@@ -1,6 +1,6 @@
 async function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
     const stopPage = start + stop - 1
-    function helper(start) {
+    async function helper(start) {
         if (start == stopPage) {
             return
         }
@@ -15,12 +15,13 @@ async function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
         }
         return helper(++start)
     }
-    helper(start);
+    await helper(start);
 }
 
 async function runAPIOnce(apicall, caughtFunc = caught) {
     try {
-        if (!await apicall()) {
+        const result = await apicall(start);
+        if (!result) {
             return
         }
     }
