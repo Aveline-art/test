@@ -20,4 +20,6 @@ function findLinkedIssue(text) {
     }
 }
 
-module.exports = findLinkedIssue
+module.exports = {
+    findLinkedIssue
+}

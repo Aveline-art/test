@@ -1,5 +1,6 @@
 // Import modules
-const findLinkedIssue = require('./findLinkedIssue.js')
+const { paginate } = require('./paginate.js');
+const { findLinkedIssue } = require('./findLinkedIssue.js');
 
 // Global variables
 var github;
@@ -33,8 +34,8 @@ async function main({ g, c, columnId }) {
 
     // Adds label if the issue's timeline indicates the issue is outdated.
     if (isTimelineOutdated(timeline, num, assignee)) {
-      addUpdateLabel(num)
       console.log(`Going to ask for an update now for issue #${num}`);
+      addUpdateLabel(num);
     } else {
       console.log(`No updates needed for issue #${num}`);
     }
@@ -47,37 +48,31 @@ async function main({ g, c, columnId }) {
  * @returns an Array of issue numbers
  */
 async function getIssueNumsFromColumn(columnId) {
-  let page = 1;
+
   let issueNums = [];
-  while (page < 100) {
-    try {
-      // https://octokit.github.io/rest.js/v18#projects-list-cards
-      const results = await github.projects.listCards({
-        column_id: columnId,
-        per_page: 100,
-        page: page
-      });
+  function apicall(page) {
+    // https://octokit.github.io/rest.js/v18#projects-list-cards
+    const results = await github.projects.listCards({
+      column_id: columnId,
+      per_page: 100,
+      page: page
+    });
 
-      // Processes results of API call
-      if (results.data.length) {
-        for (card of results.data) {
-          if (card.hasOwnProperty('content_url')) {
-            // Isolates the issue number from the rest of the url and pushes it into the array.
-            const arr = card.content_url.split('/');
-            issueNums.push(arr.pop());
-          }
+    // Processes results of API call
+    if (results.data.length) {
+      for (card of results.data) {
+        if (card.hasOwnProperty('content_url')) {
+          // Isolates the issue number from the rest of the url and pushes it into the array.
+          const arr = card.content_url.split('/');
+          issueNums.push(arr.pop());
         }
-      } else {
-        break
       }
-
-      // If an error is found, the rest of the script does not stop.
-    } catch (err) {
-      console.log(err);
-    } finally {
-      page++
+    } else {
+      return false
     }
   }
+
+  paginate(apicall, caughtFunc = err => { throw new Error(err) });
   return issueNums
 }
 
@@ -87,34 +82,27 @@ async function getIssueNumsFromColumn(columnId) {
  * @returns an Array of Objects containing the issue's timeline of events
  */
 async function getTimeline(issueNum) {
-  let page = 1;
   let timeline = [];
-  while (page < 100) {
-    try {
-      // https://octokit.github.io/rest.js/v18#issues-list-events-for-timeline
-      const results = await github.issues.listEventsForTimeline({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: issueNum,
-        per_page: 100,
-        page: page,
-      });
 
-      // Processes results of API call
-      if (results.data.length) {
-        timeline.push(...results.data);
-      } else {
-        break;
-      }
+  function apicall(page) {
+    // https://octokit.github.io/rest.js/v18#issues-list-events-for-timeline
+    const results = await github.issues.listEventsForTimeline({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      issue_number: issueNum,
+      per_page: 100,
+      page: page,
+    });
 
-      // If an error is found, the rest of the script does not stop.
-    } catch (err) {
-      console.error(`Could not retrieve timeline for #${issueNum}`);
-      break;
-    } finally {
-      page++
+    // Processes results of API call
+    if (results.data.length) {
+      timeline.push(...results.data);
+    } else {
+      return false
     }
   }
+
+  paginate(apicall, caughtFunc = () => { console.error(`Could not retrieve timeline for #${issueNum}`) });
   return timeline
 }
 
@@ -130,13 +118,13 @@ function isTimelineOutdated(timeline, issueNum, assignee) {
   for (moment of timeline) {
     if (isMomentRecent(moment.created_at, updatedByDays)) {
       if (moment.event == 'cross-referenced' && isLinkedIssue(moment, issueNum)) {
-        return false;
+        return false
       } else if (moment.event == 'commented' && isCommentByAssignee(moment, assignee)) {
-        return false;
+        return false
       }
     }
   }
-  return true;
+  return true
 }
 
 /**
@@ -212,7 +200,7 @@ async function getAssignee(issueNum) {
     return results.data.assignee.login
   } catch (err) {
     console.error(`Failed request to get assignee from issue: #${issueNum}`)
-    return false;
+    return false
   }
 }
 
