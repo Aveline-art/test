@@ -5,7 +5,7 @@ const { paginatePage } = require('./paginateAPI.js')
 // Global variables
 var github;
 var context;
-const removeLabels = ['Status: Updated'] // labels to remove
+const removeLabels = 'Status: Updated' // label to remove
 const addLabels = ['To Update !']; // labels to add
 const updatedByDays = 3; // number of days ago to check for updates
 
