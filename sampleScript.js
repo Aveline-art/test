@@ -72,6 +72,9 @@ async function getIssueNumsFromColumn(columnId) {
     }
   }
 
+  console.log('---------------')
+  console.log(issueNums)
+
   paginate(apicall, caughtFunc = err => { throw new Error(err) });
   return issueNums
 }
