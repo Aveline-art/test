@@ -106,7 +106,7 @@ async function* getTimeline(issueNum) {
  * @returns true if timeline indicates the issue is outdated, false if not
  * Note: Outdated means that the assignee did not make a linked PR or comment within the last updateLimit (see global variables) days.
  */
-function isTimelineOutdated(timeline, issueNum, assignee) {
+async function isTimelineOutdated(timeline, issueNum, assignee) {
   for await (moment of timeline) {
     if (isMomentRecent(moment.created_at, updatedByDays)) {
       if (moment.event == 'cross-referenced' && isLinkedIssue(moment, issueNum)) {
