@@ -92,8 +92,10 @@ async function getTimeline(issueNum) {
         repo: context.repo.repo,
         issue_number: issueNum,
         per_page: 100,
-        page: page
+        page: page,
       });
+      console.log("------------------")
+      console.log(results);
       if (results.data.length) {
         timeline.push(results.data);
       } else {
