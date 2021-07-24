@@ -106,6 +106,8 @@ async function getTimeline(issueNum) {
       page++
     }
   }
+
+  console.log(timeline);
   return timeline
 }
 
