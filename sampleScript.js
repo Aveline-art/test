@@ -74,6 +74,8 @@ async function getIssueNumsFromColumn(columnId) {
       page++
     }
   }
+  console.log("-------------------------")
+  console.log(issueNums);
   return issueNums
 }
 
@@ -94,8 +96,6 @@ async function getTimeline(issueNum) {
         per_page: 100,
         page: page,
       });
-      console.log("------------------")
-      console.log(results);
       if (results.data.length) {
         timeline.push(results.data);
       } else {
