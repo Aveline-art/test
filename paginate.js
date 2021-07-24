@@ -1,15 +1,25 @@
 async function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
-    console.log(start);
-    if (start = start + stop - 1) {
-        return
+    const stopPage = start + stop - 1
+    function helper(start) {
+        if (start == stopPage) {
+            return
+        }
+        try {
+            if (!await apicall(start)) {
+                return
+            }
+        }
+        catch (err) {
+            caughtFunc(err);
+        }
+        return helper(++start)
     }
-    await runAPI(apicall, caughtFunc);
-    return paginate(apicall, ++start, stop, caughtFunc)
+    helper(start);
 }
 
-async function runAPI(apicall, caughtFunc = caught) {
+async function runAPIOnce(apicall, caughtFunc = caught) {
     try {
-        if (!await apicall(start)) {
+        if (!await apicall()) {
             return
         }
     }
@@ -22,4 +32,4 @@ function caught(err) {
     console.error(err);
 }
 
-module.exports = { paginate }
+module.exports = { paginate, runAPIOnce }
