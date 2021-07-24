@@ -22,6 +22,7 @@ async function main({ g, c, columnId }) {
   const issueNums = await getIssueNumsFromColumn(columnId);
   for await (num of issueNums) {
     console.log(num);
+    console.log('--------')
   }
 
   for (num of issueNums) {
