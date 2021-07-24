@@ -95,7 +95,7 @@ async function getTimeline(issueNum) {
         page: page,
       });
       if (results.data.length) {
-        timeline.push(results.data);
+        timeline.push(...results.data);
       } else {
         break;
       }
