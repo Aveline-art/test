@@ -1,5 +1,6 @@
 async function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
-    if (start == stop) {
+    console.log(start);
+    if (start = start + stop - 1) {
         return
     }
     await runAPI(apicall, caughtFunc);
