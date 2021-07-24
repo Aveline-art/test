@@ -5,29 +5,34 @@ const { paginatePage } = require('./paginateAPI.js')
 // Global variables
 var github;
 var context;
-const projectName = 'Project Board';
-const columnName = 'In progress (actively working)';
-const labels = ['To Update !']; // labels to add
-const updateLimit = 3; // only check all events in an issue within the last updateLimit days
+const removeLabels = ['Status: Updated'] // labels to remove
+const addLabels = ['To Update !']; // labels to add
+const updatedByDays = 3; // number of days ago to check for updates
 
-async function main({ g, c }) {
+/**
+ * The main function, which retrieves issues from a specific column in a specific project, before examining the timeline of each issue for outdatedness. If outdated, the old status label is removed, and an updated is requested.
+ * @param {Object} g github object from actions/github-script 
+ * @param {Object} c context object from actions/github-script 
+ * @param {Number} columnId a number presenting a specific column to examine, supplied by GitHub secrets
+ */
+async function main({ g, c, columnId }) {
   github = g;
   context = c;
 
-  const projectId = await getProjectId();
-  const columnId = await getColumnId(projectId);
-
+  // Retrieve all issue numbers from a column
   const issueNums = await getIssueNumsFromColumn(columnId);
 
   for (num of issueNums) {
     const timeline = await getTimeline(num);
     const assignee = await getAssignee(num);
 
+    // Error catching.
     if (!assignee) {
       console.log(`Assignee not found, skipping ${num}`)
       continue
     }
 
+    // Adds label if the issue's timeline indicates the issue is outdated.
     if (isTimelineOutdated(timeline, num, assignee)) {
       addUpdateLabel(num)
       console.log(`Going to ask for an update now for issue ${num}`);
@@ -35,88 +40,21 @@ async function main({ g, c }) {
       console.log(`No updates needed for issue ${num}`);
     }
   }
-
-  return true;
 }
 
-async function getProjectId() {
-  let projectId;
-
-  const payload = {
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    per_page: 100,
-  }
-
-  function processor(results) {
-    if (results.data.length) {
-      for (project of results.data) {
-        if (project.name == projectName) {
-          projectId = project.id;
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
-
-  await paginatePage({
-    apicall: github.projects.listForRepo,
-    payload: payload,
-    processor: processor,
-  });
-
-  if (projectId) {
-    return projectId;
-  } else {
-    throw new Error('Project not found. Please check that the name is correct.');
-  }
-}
-
-async function getColumnId(projectId) {
-  let columnId;
-
-  const payload = {
-    project_id: projectId,
-    per_page: 100,
-  }
-
-  function processor(results) {
-    if (results.data.length) {
-      for (column of results.data) {
-        if (column.name == columnName) {
-          columnId = column.id;
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
-
-  await paginatePage({
-    apicall: github.projects.listColumns,
-    payload: payload,
-    processor: processor,
-  });
-
-  if (columnId) {
-    return columnId;
-  } else {
-    throw new Error('Column not found. Please check that the name is correct.');
-  }
-
-}
-
+/**
+ * Get all the issue numbers from a specific column.
+ * @param {Number} columnId the id of the column in GitHub's database
+ * @returns an Array of issue numbers
+ */
 async function getIssueNumsFromColumn(columnId) {
   const payload = {
     column_id: columnId,
     per_page: 100,
   }
 
+  // Processes results of every page of an api call.
   function processor(results) {
-
     if (results.data.length) {
       let urls = [];
       for (card of results.data) {
@@ -133,19 +71,22 @@ async function getIssueNumsFromColumn(columnId) {
     }
   }
 
+  // Paginate through an api to retrieve all of its data.
   const results = await paginatePage({
+    // https://octokit.github.io/rest.js/v18#projects-list-cards
     apicall: github.projects.listCards,
     payload: payload,
     processor: processor,
   })
 
+  // Collects the results of every page into a single array.
   return collectPages(results);
 }
 
 /**
- * Get request and returns the timeline object for an issue.
- * @param {Number} issueNum the issue number 
- * @returns the timeline
+ * Returns the timeline for an issue.
+ * @param {Number} issueNum the issue's number 
+ * @returns an Array of Objects containing the issue's timeline of events
  */
 async function getTimeline(issueNum) {
   const payload = {
@@ -164,6 +105,7 @@ async function getTimeline(issueNum) {
   }
 
   const timeline = await paginatePage({
+    // https://octokit.github.io/rest.js/v18#issues-list-events-for-timeline
     apicall: github.issues.listEventsForTimeline,
     payload: payload,
     processor: processor,
@@ -177,14 +119,16 @@ async function getTimeline(issueNum) {
 }
 
 /**
- * Assess whether the timeline passes multiple checks. Returns true if timeline indicates the issue is outdated and false if the timeline indicates the issue is up to date or the assignee could not be found. Outdated means that the assignee did not make a linked PR or comment within the last updateLimit (see global variables) days.
- * @param {*} timeline 
- * @param {*} issueNum 
- * @returns 
+ * Assesses whether the timeline is outdated.
+ * @param {Array} timeline a list of events of an issue, retrieved from the issues API
+ * @param {Number} issueNum the issue's number
+ * @param {String} assignee the issue's assignee's username
+ * @returns true if timeline indicates the issue is outdated, false if not
+ * Note: Outdated means that the assignee did not make a linked PR or comment within the last updateLimit (see global variables) days.
  */
 function isTimelineOutdated(timeline, issueNum, assignee) {
   for (moment of timeline) {
-    if (isMomentRecent(moment.created_at, updateLimit)) {
+    if (isMomentRecent(moment.created_at, updatedByDays)) {
       if (moment.event == 'cross-referenced' && isLinkedIssue(moment, issueNum)) {
         return false;
       } else if (moment.event == 'commented' && isCommentByAssignee(moment, assignee)) {
@@ -196,21 +140,28 @@ function isTimelineOutdated(timeline, issueNum, assignee) {
 }
 
 /**
- * Adds the label to the issue based on issueNum
- * @param {*} issueNum 
+ * Removes the outdated status labels (if there), then adds the to update label to the specified issue
+ * @param {Number} issueNum an issue's number
  */
 async function addUpdateLabel(issueNum) {
   try {
+    // https://octokit.github.io/rest.js/v18#issues-remove-label
+    await github.issues.removeLabel({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      issue_number: issueNum,
+      name: removeLabels,
+    })
     // https://octokit.github.io/rest.js/v18#issues-add-labels
     await github.issues.addLabels({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: issueNum,
-      labels: labels,
+      labels: addLabels,
     })
-
   } catch (err) {
-    console.error(`Could not add label for issue ${num}`)
+    console.error(`Could not add label for issue ${num}`);
+    console.error(err);
   }
 }
 

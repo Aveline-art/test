@@ -1,4 +1,4 @@
-function main(text) {
+function findLinkedIssue(text) {
     // Create RegEx for capturing KEYWORD #ISSUE-NUMBER syntax (i.e. resolves #1234)
     const KEYWORDS = ['close', 'closes', 'closed', 'fix', 'fixes', 'fixed', 'resolve', 'resolves', 'resolved']
     let reArr = []
@@ -20,4 +20,4 @@ function main(text) {
     }
 }
 
-module.exports = main
+module.exports = findLinkedIssue
