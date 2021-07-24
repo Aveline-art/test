@@ -5,7 +5,8 @@ async function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
             return
         }
         try {
-            if (!await apicall(start)) {
+            const result = await apicall(start);
+            if (!result) {
                 return
             }
         }
