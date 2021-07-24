@@ -51,7 +51,7 @@ async function main({ g, c, columnId }) {
  * @returns an Array of issue numbers
  */
 async function* getIssueNumsFromColumn(columnId) {
-  let page = 0;
+  let page = 1;
   while (true) {
     const results = await github.projects.listCards({
       column_id: columnId,
