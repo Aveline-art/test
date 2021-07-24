@@ -87,16 +87,13 @@ async function getTimeline(issueNum) {
   let timeline = [];
   while (page < 100) {
     try {
-      const results = await github.projects.listEventsForTimeline({
+      const results = await github.issues.listEventsForTimeline({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: issueNum,
         per_page: 100,
         page: page,
       });
-
-      console.log('-------------')
-      console.log(results)
       if (results.data.length) {
         timeline.push(results.data);
       } else {
