@@ -59,7 +59,7 @@ async function* getIssueNumsFromColumn(columnId) {
       page: page
     });
 
-    if (result.data.length == 0) {
+    if (results.data.length == 0) {
       return
     }
 
