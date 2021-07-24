@@ -19,14 +19,10 @@ async function main({ g, c, columnId }) {
   context = c;
 
   // Retrieve all issue numbers from a column
-  const issueNums = await getIssueNumsFromColumn(columnId);
-  for await (num of issueNums) {
-    console.log(num);
-    console.log('--------')
-  }
+  const issueNums = getIssueNumsFromColumn(columnId);
 
-  for (num of issueNums) {
-    const timeline = await getTimeline(num);
+  for await (num of issueNums) {
+    const timeline = getTimeline(num);
     const assignee = await getAssignee(num);
 
     // Error catching.
@@ -52,24 +48,24 @@ async function main({ g, c, columnId }) {
  */
 async function* getIssueNumsFromColumn(columnId) {
   let page = 1;
-  while (true) {
-    const results = await github.projects.listCards({
-      column_id: columnId,
-      per_page: 100,
-      page: page
-    });
-
-    if (results.data.length == 0) {
-      return
-    }
-
+  while (page < 100) {
     try {
-      for (card of results.data) {
-        const arr = card.content_url.split('/');
-        yield arr.pop();
+      const results = await github.projects.listCards({
+        column_id: columnId,
+        per_page: 100,
+        page: page
+      });
+
+      if (result.data.length) {
+        for (card of results.data) {
+          const arr = card.content_url.split('/');
+          yield arr.pop()
+        }
+      } else {
+        return
       }
     } finally {
-      page++
+      page++;
     }
   }
 }
@@ -79,29 +75,27 @@ async function* getIssueNumsFromColumn(columnId) {
  * @param {Number} issueNum the issue's number 
  * @returns an Array of Objects containing the issue's timeline of events
  */
-async function getTimeline(issueNum) {
-  let timeline = [];
+async function* getTimeline(issueNum) {
+  let page = 1
+  while (page < 100) {
+    try {
+      const results = await github.issues.listEventsForTimeline({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: issueNum,
+        per_page: 100,
+        page: page,
+      });
 
-  async function apicall(page) {
-    // https://octokit.github.io/rest.js/v18#issues-list-events-for-timeline
-    const results = await github.issues.listEventsForTimeline({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: issueNum,
-      per_page: 100,
-      page: page,
-    });
-
-    // Processes results of API call
-    if (results.data.length) {
-      timeline.push(...results.data);
-    } else {
-      return false
+      if (results.data.length) {
+        yield* results.data
+      } else {
+        return
+      }
+    } finally {
+      page++
     }
   }
-
-  await paginate(apicall, () => { console.error(`Could not retrieve timeline for #${issueNum}`) });
-  return timeline
 }
 
 /**
@@ -113,7 +107,7 @@ async function getTimeline(issueNum) {
  * Note: Outdated means that the assignee did not make a linked PR or comment within the last updateLimit (see global variables) days.
  */
 function isTimelineOutdated(timeline, issueNum, assignee) {
-  for (moment of timeline) {
+  for await (moment of timeline) {
     if (isMomentRecent(moment.created_at, updatedByDays)) {
       if (moment.event == 'cross-referenced' && isLinkedIssue(moment, issueNum)) {
         return false
