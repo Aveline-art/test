@@ -57,7 +57,6 @@ async function getIssueNumsFromColumn(columnId) {
         page: page
       });
       if (results.data.length) {
-        let issueNums = [];
         for (card of results.data) {
           if (card.hasOwnProperty('content_url')) {
             // Isolates the issue number from the rest of the url
