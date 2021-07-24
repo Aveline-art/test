@@ -1,19 +1,19 @@
-function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
+async function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
     if (start == stop) {
         return
     }
-    runAPI(apicall, caughtFunc);
+    await runAPI(apicall, caughtFunc);
     return paginate(apicall, ++start, stop, caughtFunc)
 }
 
-function runAPI(apicall, caughtFunc = caught) {
+async function runAPI(apicall, caughtFunc = caught) {
     try {
-        if (!apicall(start)) {
+        if (!await apicall(start)) {
             return
         }
     }
     catch (err) {
-        caught(err);
+        caughtFunc(err);
     }
 }
 

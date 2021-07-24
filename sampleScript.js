@@ -50,7 +50,7 @@ async function main({ g, c, columnId }) {
 async function getIssueNumsFromColumn(columnId) {
 
   let issueNums = [];
-  function apicall(page) {
+  async function apicall(page) {
     // https://octokit.github.io/rest.js/v18#projects-list-cards
     const results = await github.projects.listCards({
       column_id: columnId,
@@ -84,7 +84,7 @@ async function getIssueNumsFromColumn(columnId) {
 async function getTimeline(issueNum) {
   let timeline = [];
 
-  function apicall(page) {
+  async function apicall(page) {
     // https://octokit.github.io/rest.js/v18#issues-list-events-for-timeline
     const results = await github.issues.listEventsForTimeline({
       owner: context.repo.owner,
