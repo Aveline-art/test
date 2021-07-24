@@ -72,7 +72,7 @@ async function getIssueNumsFromColumn(columnId) {
     }
   }
 
-  await paginate(apicall, caughtFunc = err => { throw new Error(err) });
+  await paginate(apicall, err => { throw new Error(err) });
   return issueNums
 }
 
@@ -102,7 +102,7 @@ async function getTimeline(issueNum) {
     }
   }
 
-  await paginate(apicall, caughtFunc = () => { console.error(`Could not retrieve timeline for #${issueNum}`) });
+  await paginate(apicall, () => { console.error(`Could not retrieve timeline for #${issueNum}`) });
   return timeline
 }
 
