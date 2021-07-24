@@ -20,6 +20,7 @@ async function main({ g, c, columnId }) {
 
   // Retrieve all issue numbers from a column
   const issueNums = await getIssueNumsFromColumn(columnId);
+  console.log('is the erro here?')
   for (num of issueNums) {
     console.log(num);
   }
