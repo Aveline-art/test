@@ -74,8 +74,6 @@ async function getIssueNumsFromColumn(columnId) {
       page++
     }
   }
-  console.log("-------------------------")
-  console.log(issueNums);
   return issueNums
 }
 
@@ -87,6 +85,7 @@ async function getIssueNumsFromColumn(columnId) {
 async function getTimeline(issueNum) {
   let page = 1;
   let timeline = [];
+  console.log(issueNum);
   while (page < 100) {
     try {
       const results = await github.projects.listCards({
@@ -103,6 +102,7 @@ async function getTimeline(issueNum) {
       }
     } catch (err) {
       console.error(`Could not retrieve timeline for #${issueNum}`);
+      break;
     } finally {
       page++
     }
