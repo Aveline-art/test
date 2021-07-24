@@ -28,16 +28,16 @@ async function main({ g, c, columnId }) {
 
     // Error catching.
     if (!assignee) {
-      console.log(`Assignee not found, skipping ${num}`)
+      console.log(`Assignee not found, skipping issue #${num}`)
       continue
     }
 
     // Adds label if the issue's timeline indicates the issue is outdated.
     if (isTimelineOutdated(timeline, num, assignee)) {
       addUpdateLabel(num)
-      console.log(`Going to ask for an update now for issue ${num}`);
+      console.log(`Going to ask for an update now for issue #${num}`);
     } else {
-      console.log(`No updates needed for issue ${num}`);
+      console.log(`No updates needed for issue #${num}`);
     }
   }
 }
@@ -110,7 +110,7 @@ async function getTimeline(issueNum) {
     payload: payload,
     processor: processor,
     failure: err => {
-      console.error(`Could not retrieve timeline for ${issueNum}`);
+      console.error(`Could not retrieve timeline for #${issueNum}`);
       return true;
     }
   })
@@ -153,7 +153,7 @@ async function addUpdateLabel(issueNum) {
       name: removeLabels,
     });
   } catch (err) {
-    console.error(`No labels to remove for ${num}`);
+    console.error(`No labels to remove for issue #${num}`);
   } finally {
     try {
       // https://octokit.github.io/rest.js/v18#issues-add-labels
@@ -164,7 +164,7 @@ async function addUpdateLabel(issueNum) {
         labels: addLabels,
       });
     } catch {
-      console.error(`Could not add label for issue ${num}`);
+      console.error(`Could not add label for issue #${num}`);
       console.error(err);
     }
   }
@@ -211,7 +211,7 @@ async function getAssignee(issueNum) {
     });
     return results.data.assignee.login
   } catch (err) {
-    console.error(`Failed request to get assignee from issue: ${issueNum}`)
+    console.error(`Failed request to get assignee from issue: #${issueNum}`)
     return false;
   }
 }
