@@ -7,7 +7,7 @@ async function paginate(apicall, caughtFunc = caught, start = 1, stop = 100) {
 
         const result = await runAPIOnce(apicall.bind(this, start), caughtFunc)
         if (!result) {
-            return resu
+            return
         }
         return helper(++start)
     }
