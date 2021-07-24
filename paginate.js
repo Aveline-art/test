@@ -3,7 +3,7 @@ function paginate(apicall, start = 1, stop = 100, caughtFunc = caught) {
         return
     }
     runAPI(apicall, caughtFunc);
-    return paginate(apicall, ++start, stop, shouldContinue)
+    return paginate(apicall, ++start, stop, caughtFunc)
 }
 
 function runAPI(apicall, caughtFunc = caught) {
