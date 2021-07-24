@@ -61,6 +61,7 @@ async function* getIssueNumsFromColumn(columnId) {
     try {
       for (card of results.data) {
         const arr = card.content_url.split('/');
+        console.log(card.content_url);
         yield arr.pop();
       }
     } finally {
