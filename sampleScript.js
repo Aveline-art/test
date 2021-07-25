@@ -8,10 +8,6 @@ const statusUpdatedLabel = 'Status: Updated';
 const toUpdateLabel = 'To Update !';
 const updatedByDays = 3; // number of days ago to check for updates
 
-//tests
-const owner = 'hackforla'
-const repo = 'website'
-
 /**
  * The main function, which retrieves issues from a specific column in a specific project, before examining the timeline of each issue for outdatedness. If outdated, the old status label is removed, and an updated is requested.
  * @param {Object} g github object from actions/github-script 
@@ -38,19 +34,18 @@ async function main({ g, c, columnId }) {
     // Adds label if the issue's timeline indicates the issue is outdated.
     if (await isTimelineOutdated(timeline, num, assignee)) {
       console.log(`Going to ask for an update now for issue #${num}`);
-      //removeLabels(num, statusUpdatedLabel, toUpdateLabel);
-      //addLabels(num, toUpdateLabel);
-      //addLabel(num);
+      removeLabels(num, statusUpdatedLabel, toUpdateLabel);
+      addLabels(num, toUpdateLabel);
     } else {
       console.log(`No updates needed for issue #${num}`);
-      //removeLabels(num, toUpdateLabel);
-      //addLabels(num, statusUpdatedLabel);
+      removeLabels(num, toUpdateLabel);
+      addLabels(num, statusUpdatedLabel);
     }
   }
 }
 
 /**
- * Get all the issue numbers from a specific column.
+ * Generator that returns issue numbers.
  * @param {Number} columnId the id of the column in GitHub's database
  * @returns an Array of issue numbers
  */
@@ -83,7 +78,7 @@ async function* getIssueNumsFromColumn(columnId) {
 }
 
 /**
- * Returns the timeline for an issue.
+ * Generator that returns a timeline.
  * @param {Number} issueNum the issue's number 
  * @returns an Array of Objects containing the issue's timeline of events
  */
@@ -92,8 +87,8 @@ async function* getTimeline(issueNum) {
   while (page < 100) {
     try {
       const results = await github.issues.listEventsForTimeline({
-        owner: owner, //context.repo.owner,
-        repo: repo, //context.repo.repo,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         issue_number: issueNum,
         per_page: 100,
         page: page,
@@ -204,8 +199,8 @@ function isCommentByAssignee(data, assignee) {
 async function getAssignee(issueNum) {
   try {
     const results = await github.issues.get({
-      owner: owner, //context.repo.owner,
-      repo: repo, //context.repo.repo,
+      owner: context.repo.owner,
+      repo: context.repo.repo,
       issue_number: issueNum,
     });
     return results.data.assignee.login
