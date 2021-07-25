@@ -8,6 +8,10 @@ const statusUpdatedLabel = 'Status: Updated';
 const toUpdateLabel = 'To Update !';
 const updatedByDays = 3; // number of days ago to check for updates
 
+//tests
+const owner = 'hackforla'
+const repo = 'website'
+
 /**
  * The main function, which retrieves issues from a specific column in a specific project, before examining the timeline of each issue for outdatedness. If outdated, the old status label is removed, and an updated is requested.
  * @param {Object} g github object from actions/github-script 
@@ -88,8 +92,8 @@ async function* getTimeline(issueNum) {
   while (page < 100) {
     try {
       const results = await github.issues.listEventsForTimeline({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
+        owner: owner, //context.repo.owner,
+        repo: repo, //context.repo.repo,
         issue_number: issueNum,
         per_page: 100,
         page: page,
@@ -200,8 +204,8 @@ function isCommentByAssignee(data, assignee) {
 async function getAssignee(issueNum) {
   try {
     const results = await github.issues.get({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
+      owner: owner, //context.repo.owner,
+      repo: repo, //context.repo.repo,
       issue_number: issueNum,
     });
     return results.data.assignee.login
