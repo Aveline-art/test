@@ -22,7 +22,6 @@ async function main({ g, c, columnId }) {
   const issueNums = getIssueNumsFromColumn(columnId);
 
   for await (num of issueNums) {
-    console.log(num);
     const timeline = getTimeline(num);
     const assignee = await getAssignee(num);
 
