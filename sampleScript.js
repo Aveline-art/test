@@ -165,7 +165,7 @@ async function addLabels(issueNum, ...labels) {
       issue_number: issueNum,
       labels: labels,
     });
-
+    console.log(`Added these labels to issue #${num}: ${labels}`);
     // If an error is found, the rest of the script does not stop.
   } catch {
     console.error(`Could not add these labels for issue #${num}: ${labels}`);
