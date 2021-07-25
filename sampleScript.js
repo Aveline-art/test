@@ -61,14 +61,12 @@ async function* getIssueNumsFromColumn(columnId) {
         page: page
       });
 
-      console.log(columnId, results.data.length);
       if (results.data.length) {
-        console.log('made it here')
         for (card of results.data) {
-          console.log(card)
-          const arr = card.content_url.split('/');
-          console.log(arr)
-          yield arr.pop()
+          if (card.hasOwnProperty('content_url')) {
+            const arr = card.content_url.split('/');
+            yield arr.pop()
+          }
         }
       } else {
         return
