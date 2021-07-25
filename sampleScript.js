@@ -22,7 +22,6 @@ async function main({ g, c, columnId }) {
   const issueNums = getIssueNumsFromColumn(columnId);
 
   for await (const num of issueNums) {
-    console.log(num);
     const timeline = getTimeline(num);
     const assignee = await getAssignee(num);
 
@@ -33,7 +32,7 @@ async function main({ g, c, columnId }) {
     }
 
     // Adds label if the issue's timeline indicates the issue is outdated.
-    if (await isTimelineOutdated(timeline, num, assignee)) {
+    if (isTimelineOutdated(timeline, num, assignee)) {
       console.log(`Going to ask for an update now for issue #${num}`);
       //removeLabels(num, statusUpdatedLabel, toUpdateLabel);
       //addLabels(num, toUpdateLabel);
@@ -64,7 +63,6 @@ async function* getIssueNumsFromColumn(columnId) {
       if (results.data.length) {
         for (card of results.data) {
           const arr = card.content_url.split('/');
-          console.log(card.content_url);
           yield arr.pop()
         }
       } else {
