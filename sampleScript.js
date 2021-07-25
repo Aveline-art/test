@@ -21,7 +21,8 @@ async function main({ g, c, columnId }) {
   // Retrieve all issue numbers from a column
   const issueNums = getIssueNumsFromColumn(columnId);
 
-  for await (const num of issueNums) {
+  for await (num of issueNums) {
+    console.log(num);
     const timeline = getTimeline(num);
     const assignee = await getAssignee(num);
 
