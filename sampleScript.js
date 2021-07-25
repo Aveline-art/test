@@ -71,7 +71,7 @@ async function* getIssueNumsFromColumn(columnId) {
         return
       }
     } catch {
-      pass
+      continue
     } finally {
       page++;
     }
