@@ -63,6 +63,7 @@ async function* getIssueNumsFromColumn(columnId) {
 
       console.log(columnId, results.data.length);
       if (results.data.length) {
+        console.log('made it here')
         for (card of results.data) {
           const arr = card.content_url.split('/');
           yield arr.pop()
