@@ -33,7 +33,7 @@ async function main({ g, c, columnId }) {
     }
 
     // Adds label if the issue's timeline indicates the issue is outdated.
-    if (isTimelineOutdated(timeline, num, assignee)) {
+    if (await isTimelineOutdated(timeline, num, assignee)) {
       console.log(`Going to ask for an update now for issue #${num}`);
       //removeLabels(num, statusUpdatedLabel, toUpdateLabel);
       //addLabels(num, toUpdateLabel);
