@@ -4,8 +4,8 @@ const { findLinkedIssue } = require('./findLinkedIssue.js');
 // Global variables
 var github;
 var context;
-const removeLabels = ['Status: Updated'] // labels to remove
-const addLabels = ['To Update !']; // labels to remove then add
+const statusUpdatedLabel = 'Status: Updated';
+const toUpdateLabel = 'To Update !';
 const updatedByDays = 3; // number of days ago to check for updates
 
 /**
@@ -22,7 +22,6 @@ async function main({ g, c, columnId }) {
   const issueNums = getIssueNumsFromColumn(columnId);
 
   for await (num of issueNums) {
-    console.log('---------------------------', num, '-----------------')
     const timeline = getTimeline(num);
     const assignee = await getAssignee(num);
 
@@ -35,9 +34,13 @@ async function main({ g, c, columnId }) {
     // Adds label if the issue's timeline indicates the issue is outdated.
     if (await isTimelineOutdated(timeline, num, assignee)) {
       console.log(`Going to ask for an update now for issue #${num}`);
-      addUpdateLabel(num);
+      //removeLabels(num, statusUpdatedLabel, toUpdateLabel);
+      //addLabels(num, toUpdateLabel);
+      //addLabel(num);
     } else {
       console.log(`No updates needed for issue #${num}`);
+      //removeLabels(num, toUpdateLabel);
+      //addLabels(num, statusUpdatedLabel);
     }
   }
 }
@@ -65,6 +68,8 @@ async function* getIssueNumsFromColumn(columnId) {
       } else {
         return
       }
+    } catch {
+      continue
     } finally {
       page++;
     }
@@ -93,7 +98,10 @@ async function* getTimeline(issueNum) {
       } else {
         return
       }
-    } finally {
+    } catch {
+      continue
+    }
+    finally {
       page++
     }
   }
@@ -121,13 +129,12 @@ async function isTimelineOutdated(timeline, issueNum, assignee) {
 }
 
 /**
- * Removes the outdated status labels (if there), then adds the to update label to the specified issue
+ * Removes labels from a specified issue
  * @param {Number} issueNum an issue's number
+ * @param {Array} labels an array containing the labels to remove
  */
-async function addUpdateLabel(issueNum) {
-
-  const labelsToRemove = removeLabels.concat(addLabels)
-  for (label of labelsToRemove) {
+async function removeLabels(issueNum, ...labels) {
+  for (label of labels) {
     try {
       // https://octokit.github.io/rest.js/v18#issues-remove-label
       await github.issues.removeLabel({
@@ -136,27 +143,32 @@ async function addUpdateLabel(issueNum) {
         issue_number: issueNum,
         name: label,
       });
-      console.log(`Removed ${label} from issue #${num}`);
+      console.log(`Removed "${label}" from issue #${num}`);
     } catch (err) {
-      console.error(`No ${label} label to remove for issue #${num}`);
+      console.error(`No "${label}" label to remove for issue #${num}`);
     }
   }
+}
 
+/**
+ * Adds labels to a specified issue
+ * @param {Number} issueNum an issue's number
+ * @param {Array} labels an array containing the labels to add
+ */
+async function addLabels(issueNum, ...labels) {
   try {
     // https://octokit.github.io/rest.js/v18#issues-add-labels
     await github.issues.addLabels({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: issueNum,
-      labels: addLabels,
+      labels: labels,
     });
 
     // If an error is found, the rest of the script does not stop.
   } catch {
-    console.error(`Could not add these labels for issue #${num}: ${addLabels}`);
-    console.error(err);
+    console.error(`Could not add these labels for issue #${num}: ${labels}`);
   }
-
 }
 
 /***********************
@@ -185,7 +197,7 @@ function isCommentByAssignee(data, assignee) {
 
 async function getAssignee(issueNum) {
   try {
-    results = await github.issues.get({
+    const results = await github.issues.get({
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: issueNum,
