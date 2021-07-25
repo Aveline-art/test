@@ -21,8 +21,6 @@ async function main({ g, c, columnId }) {
   // Retrieve all issue numbers from a column
   const issueNums = getIssueNumsFromColumn(columnId);
 
-  console.log('here');
-
   for await (num of issueNums) {
     console.log(num);
     const timeline = getTimeline(num);
@@ -63,6 +61,7 @@ async function* getIssueNumsFromColumn(columnId) {
         page: page
       });
 
+      console.log(columnId, results);
       if (results.data.length) {
         for (card of results.data) {
           const arr = card.content_url.split('/');
@@ -72,7 +71,7 @@ async function* getIssueNumsFromColumn(columnId) {
         return
       }
     } catch {
-      continue
+      pass
     } finally {
       page++;
     }
