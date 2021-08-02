@@ -227,6 +227,7 @@ async function getAssignees(issueNum) {
       issue_number: issueNum,
     });
     const assigneesData = results.data.assignees;
+    console.log(assigneesData)
     assigneesLogins = filterForAssigneesLogins(assigneesData);
     return assigneesLogins
   } catch (err) {
