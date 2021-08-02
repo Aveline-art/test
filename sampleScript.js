@@ -251,7 +251,7 @@ function filterForAssigneesLogins(data) {
   return logins
 }
 
-async function createAssigneeString(assignees) {
+function createAssigneeString(assignees) {
   const assigneeString = [];
   for (assignee of assignees) {
     assigneeString.push(`@${assignee}`);
