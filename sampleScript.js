@@ -28,6 +28,8 @@ async function main({ g, c, columnId }) {
     const timeline = getTimeline(issueNum);
     const assignees = await getAssignees(issueNum);
 
+    console.log("1", assignees);
+
     // Error catching.
     if (!assignees) {
       console.log(`Assignee not found, skipping issue #${issueNum}`)
@@ -36,6 +38,7 @@ async function main({ g, c, columnId }) {
 
     // Adds label if the issue's timeline indicates the issue is outdated.
     if (await isTimelineOutdated(timeline, issueNum, assignees)) {
+      console.log("2", assignees);
       console.log(`Going to ask for an update now for issue #${issueNum}`);
       await removeLabels(issueNum, statusUpdatedLabel, toUpdateLabel);
       await addLabels(issueNum, toUpdateLabel);
@@ -182,10 +185,11 @@ async function addLabels(issueNum, ...labels) {
 *************************************/
 
 async function postComment(issueNum, assignees) {
+  console.log("3", assignees);
   try {
     const assigneeString = createAssigneeString(assignees);
     const instructions = formatComment(assigneeString);
-
+    console.log("4", assigneeString);
     await github.issues.createComment({
       owner: context.repo.owner,
       repo: context.repo.repo,
@@ -227,7 +231,6 @@ async function getAssignees(issueNum) {
       issue_number: issueNum,
     });
     const assigneesData = results.data.assignees;
-    console.log(assigneesData)
     assigneesLogins = filterForAssigneesLogins(assigneesData);
     return assigneesLogins
   } catch (err) {
