@@ -18,8 +18,12 @@ jobs:
 
     # checkout repo
     - uses: actions/checkout@v2
-    - run: cd github-actions
-    - run: ls
+    - run: |
+        ls
+        pwd
+        cd github-actions
+        ls
+        pwd
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
