@@ -38,5 +38,4 @@ jobs:
 
     # run js file if it is the first Thursday of the month
     - name: Trim Members
-      if: ${{ steps.date.outputs.date <= 7 }}
       run: node github-actions/github-data/contributors-data.js
