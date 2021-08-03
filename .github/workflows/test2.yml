@@ -10,7 +10,6 @@ jobs:
   trim_contributors:
     runs-on: ubuntu-latest
 
-    if: github.repository == 'hackforla/website'
 
     steps:
     # get the day number of the current month
