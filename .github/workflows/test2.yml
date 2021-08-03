@@ -1,35 +1,23 @@
-name: Update Team Members
-
-
-# Run this action at 11:00 (3 am Pacific) on the first Thursday of the month.
-on: workflow_dispatch
-
-
+name: Add Update Comment
+on:
+  issues:
+    types:
+      - labeled
 jobs:
-  # This workflow contains a single job called "trim_contirbutors"
-  trim_contributors:
+  add-comment:
+    if: "${{ github.event.label.name == 'To Update !' }}"
     runs-on: ubuntu-latest
-
+    permissions:
+      issues: write
     steps:
-    # get the day number of the current month
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +\%d)"
-
-    # checkout repo
-    - uses: actions/checkout@v2
-    - run: |
-        ls
-        cd github-actions
-        cd github-data
-        ls
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-        cache: 'npm'
-    - run: npm install
-      working-directory: ./github-actions/github-data
-
-    # run js file if it is the first Thursday of the month
-    - name: Trim Members
-      run: node github-actions/github-data/contributors-data.js
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            @${{ join(github.event.issue.assignees.*.login, ' @') }} Please add update
+            1. Progress: "What is the current status of your project? What have you completed and what is left to do?"
+            2. Blockers: "Difficulties or errors encountered."
+            3. Availability: "How much time will you have this week to work on this issue?"
+            4. ETA: "When do you expect this issue to be completed?"
+            5. Pictures: "Add any pictures of the visual changes made to the site so far."
