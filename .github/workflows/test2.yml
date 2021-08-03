@@ -20,10 +20,9 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         ls
-        pwd
         cd github-actions
+        cd github-data
         ls
-        pwd
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
