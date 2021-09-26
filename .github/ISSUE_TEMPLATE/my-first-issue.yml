@@ -10,7 +10,6 @@ body:
       - label: "Yes"
         required: true
 - type: textarea
-  id: repro
   attributes:
     label: Overview
     description: "DO NOT EDIT"
@@ -20,7 +19,6 @@ body:
   validations:
     required: true
 - type: textarea
-  id: repro
   attributes:
     label: Action Items
     description: "DO NOT EDIT"
