@@ -12,13 +12,23 @@ body:
 - type: textarea
   id: repro
   attributes:
-    label: Reproduction steps
-    description: "How do you trigger this bug? Please walk us through it step by step."
+    label: Overview
+    description: "DO NOT EDIT"
     value: |
-      1.
-      2.
-      3.
-      ...
+      As a developer, we need to make sure our development environment is set up. For my very first issue, I will keep track of my progress as I go through the [CONTRIBUTING.md]()
+    render: bash
+  validations:
+    required: true
+- type: textarea
+  id: repro
+  attributes:
+    label: Action Items
+    description: "DO NOT EDIT"
+    value: |
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
     render: bash
   validations:
     required: true
