@@ -4,7 +4,8 @@ title: "My Very First Issue: [replace GitHub username here]"
 labels: ["very first issue"]
 body:
   - type: markdown
-    value: "## Welcome!"
+    attributes:
+      value: "## Welcome!"
   - type: markdown
     attributes:
       value: |
