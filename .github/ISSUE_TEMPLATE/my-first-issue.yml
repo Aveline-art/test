@@ -14,7 +14,7 @@ body:
     label: Overview
     description: "DO NOT EDIT"
     value: |
-      As a developer, we need to make sure our development environment is set up. For my very first issue, I will keep track of my progress as I go through the [CONTRIBUTING.md]()
+      As a developer, we need to make sure our development environment is set up. For my very first issue, I will keep track of my progress as I go through the [CONTRIBUTING.md](https://github.com/hackforla/website/blob/gh-pages/CONTRIBUTING.md)
   validations:
     required: true
 - type: textarea
@@ -26,5 +26,13 @@ body:
       - [ ]
       - [ ]
       - [ ]
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Resources/Instructions
+    description: "DO NOT EDIT"
+    value: |
+      [CONTRIBUTING.md](https://github.com/hackforla/website/blob/gh-pages/CONTRIBUTING.md)
   validations:
     required: true
