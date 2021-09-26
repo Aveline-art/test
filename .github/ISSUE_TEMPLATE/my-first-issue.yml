@@ -5,7 +5,7 @@ labels: ["very first issue"]
 body:
 - type: checkboxes
   attributes:
-    description: Did I replace [replace GitHub username here] in the title with my GitHub username?
+    description: ## Did I replace [replace GitHub username here] in the title with my GitHub username?
     options:
       - label: "Yes"
         required: true
