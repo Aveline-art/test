@@ -1,8 +1,10 @@
 name: My Very First Issue
-description: Pick this if you came here from our [CONTRIBUTING.md](https://github.com/hackforla/website/blob/gh-pages/CONTRIBUTING.md)
+description: Pick this if you came here from our CONTRIBUTING.md
 title: "My Very First Issue: [replace GitHub username here]"
 labels: ["very first issue"]
 body:
+  - type: markdown
+    value: "## Welcome!"
   - type: markdown
     attributes:
       value: |
