@@ -7,5 +7,5 @@ body:
   attributes:
     description: Did I replace [replace GitHub username here] in the title with my GitHub username?
     options:
-      - label: Yes
+      - label: "Yes"
         required: true
