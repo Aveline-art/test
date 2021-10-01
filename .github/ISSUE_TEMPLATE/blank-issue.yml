@@ -14,6 +14,9 @@ body:
     attributes:
       label: Action Items
       description: "List the research to be done, or the steps to be completed. Note: If the steps can be divided into tasks for more than one person, we recommend dividing it up into separate issues, or assigning it as a pair programming task."
+      value: |
+        - [ ] Item 1
+        - [ ] Item 2
     validations:
       required: true
   - type: textarea
