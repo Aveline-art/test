@@ -1,8 +1,8 @@
 name: 'Blank Issue '
 description: 'Standard HackforLA issue template '
-title: ''
-labels: ''
-assignees: ''
+title: ""
+labels: ""
+assignees: ""
 
 body:
   - type: input
