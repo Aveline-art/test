@@ -1,9 +1,11 @@
-name: 'UI Designer to Developer Issue Form'
-description: 'Form for UI to Dev hand-off issues'
-title: "[Dev]: "
+name: 'Component Issue Form'
+description: 'Issue form for Design to Dev hand-off issues concerning components'
+title: "[Component]: "
 labels: ["role: frontend"]
 
 body:
+  - type: markdown
+    value: "## Before we begin, please give an appropriate title to the issue. Make sure to include the name or names of the components in question in the title."
   - type: textarea
     id: dependency-explanation
     attributes:
@@ -15,16 +17,16 @@ body:
     id: overview
     attributes:
       label: Overview
-      description: Clearly state the purpose of this issue in 2 sentences or less
-      placeholder: |
-        Example: As a [developer/programmer/designer/member of the team/etc], we need to [insert some sort of standard, such as "keep out code clean" or "fix bugs" or "make sure website appears welcoming"]. For this issue, we will [do something to fulfill our standard, such as "edit the code in the data folder" or "correct a bug in out components" or "increase the title size on the homepage"].
+      description: Please replace [name] with the name or names of the components this issue concerns.
+      value: |
+        As a designer, we need to create or update our component library so that our designs are reusable and designers and developers are on the same page. For this issue, we will create or make updates to the [name] component.
     validations:
       required: true
   - type: textarea
     id: action-items
     attributes:
       label: Action Items
-      description: "List the research to be done, or the steps to be completed. Note: If the steps can be divided into tasks for more than one person, we recommend dividing it up into separate issues, or assigning it as a pair programming task."
+      description: "Please skip this portion."
       value: |
         - [ ] Item 1
         - [ ] Item 2
@@ -34,7 +36,7 @@ body:
     id: resources-instructions
     attributes:
       label: "Resources/Instructions"
-      description: "Provide links to resources or instructions that may help with this issue. This can include files to be worked on, external sites with solutions, documentation, etc."
+      description: "Provide links to resources or instructions that may help with this issue such as links to Figma or a related issue. This can also include files to be worked on, external sites with solutions, documentation, etc."
       value: |
         [Resources](https://github.com/hackforla/CivicTechJobs/wiki/Resources)
     validations:
