@@ -6,7 +6,7 @@ labels: ["role: frontend"]
 body:
   - type: markdown
     attributes:
-      value: "## Before we begin, please give an appropriate title to the issue. Make sure to include the name or names of the components in question in the title."
+      value: "## Before we begin, please give an appropriate title to the issue. Make sure to include the name or names of the component/s in question in the title."
   - type: textarea
     id: dependency-explanation
     attributes:
@@ -20,7 +20,7 @@ body:
       label: Overview
       description: Please replace [name] with the name or names of the components this issue concerns.
       value: |
-        As a designer, we need to create or update our component library so that our designs are reusable and designers and developers are on the same page. For this issue, we will create or make updates to the [name] component.
+        As a designer, we need to create or update our component library so that our designs are reusable and designers and developers are on the same page. For this issue, we will create or make updates to the [name] component/s.
     validations:
       required: true
   - type: textarea
@@ -37,7 +37,7 @@ body:
     id: resources-instructions
     attributes:
       label: "Resources/Instructions"
-      description: "Provide links to resources or instructions that may help with this issue such as links to Figma or a related issue. This can also include files to be worked on, external sites with solutions, documentation, etc."
+      description: "Provide links to Figma page of the component/s, and add extra notes as necessary for developers to locate the design. Feel free to also provide any other necessary information such as related issues, files to be worked on, external sites with solutions, documentation, etc."
       value: |
         [Resources](https://github.com/hackforla/CivicTechJobs/wiki/Resources)
     validations:
