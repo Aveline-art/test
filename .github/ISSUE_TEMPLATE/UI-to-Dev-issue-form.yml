@@ -5,7 +5,8 @@ labels: ["role: frontend"]
 
 body:
   - type: markdown
-    value: "## Before we begin, please give an appropriate title to the issue. Make sure to include the name or names of the components in question in the title."
+    attributes:
+      value: "## Before we begin, please give an appropriate title to the issue. Make sure to include the name or names of the components in question in the title."
   - type: textarea
     id: dependency-explanation
     attributes:
