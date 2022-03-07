@@ -9,7 +9,7 @@ body:
       value: |
         ## Before we begin, please give an appropriate title to the issue. Make sure to include the name or names of the component/s in question in the title. For example:
         
-        [Component]: Update dropdown with new colors.
+        ## [Component]: Update dropdown with new colors.
         
   - type: textarea
     id: dependency-explanation
