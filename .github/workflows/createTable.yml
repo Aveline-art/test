@@ -9,7 +9,7 @@ jobs:
       - name: Checking out repo
         uses: actions/checkout@v2
         
-      - name: Move Issue
+      - name: Make Table
         id: api-json
         uses: Aveline-art/freelance-giggles@master
         with:
