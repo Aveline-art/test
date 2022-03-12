@@ -1,0 +1,12 @@
+[
+  {
+    "organization": "hackforla",
+    "repositories": ["website", "VRMS"],
+    "labels": ["good first issue"]
+  },
+  {
+    "organization": "100Automations",
+    "repositories": ["Website"],
+    "labels": ["good first issue"]
+  }
+]
