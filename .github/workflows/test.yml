@@ -9,6 +9,8 @@ jobs:
     
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
-        run: echo "image=123/123:123" >> $GITHUB_OUTPUT
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: echo "image=123/123:$IMAGE_TAG" >> $GITHUB_OUTPUT
       - run: echo "${{ steps.build-image.outputs.image }}"
       
