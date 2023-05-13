@@ -42,6 +42,8 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           echo "made it here! 1 ======"
+          cat ./.chalice/deployment.txt
+          cat ./.chalice-$environment/deployment.txt 
           git add .chalice-$environment/
           echo "made it here! 2 ======"
           git commit -m "Cacheing file made via $GITHUB_RUN_ID - $GITHUB_RUN_NUMBER"
