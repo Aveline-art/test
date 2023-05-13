@@ -25,18 +25,17 @@ jobs:
       - name: Retrieve cache
         run: |
           git checkout chalice-cache
-          cp -r ./.chalice-$environment ./.chalice-temp
+          cp -r .chalice-$environment .chalice-temp
           git checkout main
           cp -r .chalice-temp/. .chalice
 
       - name: Alter cache
         run: |
           echo "$GITHUB_RUN_ID - $GITHUB_RUN_NUMBER" > ./.chalice/deployment.txt
-          cat ./.chalice/deployment.txt
 
       - name: Store cache
         run: |
-          cp -r ./.chalice ./.chalice-temp
+          cp -r .chalice/. .chalice-temp
           ls
           echo "here"
           git checkout chalice-cache
