@@ -27,7 +27,7 @@ jobs:
           git checkout chalice-cache
           cp -r ./.chalice-$environment ./.chalice-temp
           git checkout main
-          cp -r ./.chalice-temp ./.chalice
+          cp -r .chalice-temp/. .chalice
 
       - name: Alter cache
         run: |
