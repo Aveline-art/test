@@ -1,4 +1,4 @@
-name: Cache Branch Job
+name: Cache Branchman Job
 on:
   workflow_dispatch:
   push:
@@ -10,7 +10,7 @@ env:
 
 jobs:
   deploy:
-    name: Test Branch Cacheing
+    name: Test Branchman Cacheing
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repo
