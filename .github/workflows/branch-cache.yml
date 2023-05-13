@@ -37,6 +37,8 @@ jobs:
       - name: Store cache
         run: |
           cp -r ./.chalice ./.chalice-temp
+          ls
+          echo "here"
           git checkout chalice-cache
           cp -r ./.chalice-temp ./.chalice-$environment
           git config user.name 'github-actions[bot]'
