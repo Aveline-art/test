@@ -25,7 +25,7 @@ jobs:
       - name: Retrieve cache
         run: |
           git checkout chalice-cache
-          cp -r .chalice-$environment .chalice-temp
+          cp -r .chalice-$environment/. .chalice-temp
           git checkout main
           cp -r .chalice-temp/. .chalice
 
