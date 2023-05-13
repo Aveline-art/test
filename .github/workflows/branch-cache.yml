@@ -1,0 +1,43 @@
+name: Cache Branch Job
+on:
+  workflow_dispatch:
+  #push:
+  #    branches:
+  #        - main
+
+env:
+  environment: production
+
+jobs:
+  deploy:
+    name: Test Branch Cacheing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Log vars
+        run: |
+          echo "$GITHUB_ACTOR"
+
+      - name: Retrieve cache
+        run: |
+          git checkout chalice-cache
+          cp -r ./.chalice-$environment ./.chalice-temp
+          git checkout main
+          cp -r ./.chalice-temp ./.chalice
+
+      - name: Alter cache
+        run: |
+          echo "$GITHUB_RUN_ID$GITHUB_RUN_NUMBER" > ./.chalice/deployment.txt
+
+      - name: Store cache
+        run: |
+          cp -r ./chalice ./.chalice-temp
+          git checkout chalice-cache
+          cp -r ./.chalice-temp ./.chalice-$environment
+          git add ./chalice-$environment
+          git commit -m "Cacheing file made via "$GITHUB_RUN_ID - $GITHUB_RUN_NUMBER"
+          git push
