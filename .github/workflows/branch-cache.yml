@@ -39,5 +39,5 @@ jobs:
           git checkout chalice-cache
           cp -r ./.chalice-temp ./.chalice-$environment
           git add ./.chalice-$environment
-          git commit -m "Cacheing file made via "$GITHUB_RUN_ID - $GITHUB_RUN_NUMBER"
+          git commit -m "Cacheing file made via $GITHUB_RUN_ID - $GITHUB_RUN_NUMBER"
           git push
