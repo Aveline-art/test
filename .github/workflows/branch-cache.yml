@@ -31,7 +31,7 @@ jobs:
 
       - name: Alter cache
         run: |
-          echo "$GITHUB_RUN_ID$GITHUB_RUN_NUMBER" > ./.chalice/deployment.txt
+          echo "$GITHUB_RUN_ID - $GITHUB_RUN_NUMBER" > ./.chalice/deployment.txt
           cat ./.chalice/deployment.txt
 
       - name: Store cache
@@ -43,4 +43,5 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add .chalice-$environment/
           git commit -m "Cacheing file made via $GITHUB_RUN_ID - $GITHUB_RUN_NUMBER"
+          echo "made it here!"
           git push
