@@ -35,7 +35,7 @@ jobs:
 
       - name: Store cache
         run: |
-          cp -r ./chalice ./.chalice-temp
+          cp -r ./.chalice ./.chalice-temp
           git checkout chalice-cache
           cp -r ./.chalice-temp ./.chalice-$environment
           git add ./chalice-$environment
