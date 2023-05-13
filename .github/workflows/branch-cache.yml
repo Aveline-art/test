@@ -43,6 +43,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           echo "made it here! 1 ======"
           git add .chalice-$environment/
+          git clean -f -x
           echo "made it here! 2 ======"
           git commit -m "Cacheing file made via $GITHUB_RUN_ID - $GITHUB_RUN_NUMBER"
           echo "made it here! 3 ======"
