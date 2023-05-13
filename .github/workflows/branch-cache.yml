@@ -32,6 +32,7 @@ jobs:
       - name: Alter cache
         run: |
           echo "$GITHUB_RUN_ID$GITHUB_RUN_NUMBER" > ./.chalice/deployment.txt
+          cat ./.chalice/deployment.txt
 
       - name: Store cache
         run: |
