@@ -43,6 +43,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           echo "made it here! 1 ======"
           cat ./.chalice/deployment.txt
+          cat ./.chalice-temp/deployment.txt 
           cat ./.chalice-$environment/deployment.txt 
           git add .chalice-$environment/
           echo "made it here! 2 ======"
