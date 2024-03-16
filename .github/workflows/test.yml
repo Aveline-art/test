@@ -26,21 +26,34 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Get rate of change of project
+      - name: Determine the version bump from rate of change of project
+        id: rate-of-change
         run: |
-          DIFF_FILES=$(git diff --name-only ${{ github.event.after }} ${{ github.event.before }})
+          # Get a list of files changed
+          DIFF_FILE_NAMES=$(git diff --name-only 15acff35b628a48e9380cc734bf6d5e8066a44ab e11315cbbdfc3b6f344f7a71d7264cd9616f45a8)
+
+          # Extract number of files changes and number of line changes
+          DIFF_STATS=$(git diff --shortstat 15acff35b628a48e9380cc734bf6d5e8066a44ab e11315cbbdfc3b6f344f7a71d7264cd9616f45a8)
+          NO_FILES_CHANGED=$(echo $DIFF_STATS | grep -oE '[0-9]+' | head -1)
+          NO_LINES_CHANGED=$(echo $DIFF_STATS | grep -oE '[0-9]+' | tail -n+2 | paste -sd+ - | bc)
 
           if [[ $DIFF_FILES =~ "pyproject.toml" ]] || [[ $DIFF_FILES =~ "poetry.lock" ]]
           then
             echo "VERSION_BUMP=major" >> "$GITHUB_OUTPUT"
-          else
+          elif [[ $NO_FILES_CHANGED -gt 5 ]] || [[ $NO_LINES_CHANGED -gt 100 ]]
+          then
             echo "VERSION_BUMP=minor" >> "$GITHUB_OUTPUT"
+          else
+            echo "VERSION_BUMP=patch" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Log vars
+        env:
+          VERSION_BUMP: ${{ steps.rate-of-change.outputs.VERSION_BUMP }}
         run: |
+          echo "Bumping the version by $VERSION_BUMP"
           PREVIOUS_VERSION=$(poetry version --short)
-          UPDATED_VERSION=$(poetry version patch --short)
+          UPDATED_VERSION=$(poetry version $VERSION_BUMP --short)
           echo "$GITHUB_ACTOR"
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
