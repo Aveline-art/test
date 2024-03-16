@@ -28,7 +28,14 @@ jobs:
 
       - name: Get rate of change of project
         run: |
-          git diff --name-only ${{ github.event.after }} ${{ github.event.before }}
+          DIFF_FILES=$(git diff --name-only ${{ github.event.after }} ${{ github.event.before }})
+
+          if [[ $DIFF_FILES =~ "pyproject.toml" ]] || [[ $DIFF_FILES =~ "poetry.lock" ]]
+          then
+            echo "VERSION_BUMP=major" >> "$GITHUB_OUTPUT"
+          else
+            echo "VERSION_BUMP=minor" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Log vars
         run: |
