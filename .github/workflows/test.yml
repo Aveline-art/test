@@ -37,6 +37,7 @@ jobs:
           NO_FILES_CHANGED=$(echo $DIFF_STATS | grep -oE '[0-9]+' | head -1)
           NO_LINES_CHANGED=$(echo $DIFF_STATS | grep -oE '[0-9]+' | tail -n+2 | paste -sd+ - | bc)
 
+          # Determine version to bump to and assign to github variable
           if [[ $DIFF_FILES =~ "pyproject.toml" ]] || [[ $DIFF_FILES =~ "poetry.lock" ]]
           then
             echo "VERSION_BUMP=major" >> "$GITHUB_OUTPUT"
@@ -51,10 +52,12 @@ jobs:
         env:
           VERSION_BUMP: ${{ steps.rate-of-change.outputs.VERSION_BUMP }}
         run: |
+          # Capture variables and bump version
           echo "Bumping the version by $VERSION_BUMP"
           PREVIOUS_VERSION=$(poetry version --short)
           UPDATED_VERSION=$(poetry version $VERSION_BUMP --short)
-          echo "$GITHUB_ACTOR"
+
+          # Commit changes
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add --all
