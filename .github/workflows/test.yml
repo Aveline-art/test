@@ -30,10 +30,10 @@ jobs:
         id: rate-of-change
         run: |
           # Get a list of files changed
-          DIFF_FILE_NAMES=$(git diff --name-only 15acff35b628a48e9380cc734bf6d5e8066a44ab e11315cbbdfc3b6f344f7a71d7264cd9616f45a8)
+          DIFF_FILE_NAMES=$(git diff --name-only ${{ github.event.after }} ${{ github.event.before }})
 
           # Extract number of files changes and number of line changes
-          DIFF_STATS=$(git diff --shortstat 15acff35b628a48e9380cc734bf6d5e8066a44ab e11315cbbdfc3b6f344f7a71d7264cd9616f45a8)
+          DIFF_STATS=$(git diff --shortstat ${{ github.event.after }} ${{ github.event.before }})
           NO_FILES_CHANGED=$(echo $DIFF_STATS | grep -oE '[0-9]+' | head -1)
           NO_LINES_CHANGED=$(echo $DIFF_STATS | grep -oE '[0-9]+' | tail -n+2 | paste -sd+ - | bc)
 
